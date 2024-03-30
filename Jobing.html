@@ -8,11 +8,77 @@
             font-family: Arial, Helvetica, sans-serif;
             background-color: #aaeeff;
             margin: 10px;
-            
+
         }
 
     </style>
+    <script src="calculator.js"></script>
 </head>
+<body>
+<p id="expression"></p>
+
+	<button type="button" onclick="calculate(expression)">calculate</button>
+		<button type="button" onclick="plus()">+</button>
+		<button type="button" onclick="minus()">-</button>
+		<button type="button" onclick="multiplication()">*</button>
+		<button type="button" onclick="division()">/</button>
+		<button type="button" onclick="openParenthesis()">(</button>
+		<button type="button" onclick="closeParenthesis()">)</button>
+		
+		<button type="button" onclick="expression += '1'; document.getElementById('expression').innerHTML = expression"> 1 </button>
+		<button type="button" onclick="expression += '2'; document.getElementById('expression').innerHTML = expression"> 2 </button>
+		<button type="button" onclick="expression += '3'; document.getElementById('expression').innerHTML = expression"> 3 </button>
+		<button type="button" onclick="expression += '4'; document.getElementById('expression').innerHTML = expression"> 4 </button>
+		<button type="button" onclick="expression += '5'; document.getElementById('expression').innerHTML = expression"> 5 </button>
+		<button type="button" onclick="expression += '6'; document.getElementById('expression').innerHTML = expression"> 6 </button>
+		<button type="button" onclick="expression += '7'; document.getElementById('expression').innerHTML = expression"> 7 </button>
+		<button type="button" onclick="expression += '8'; document.getElementById('expression').innerHTML = expression"> 8 </button>
+		<button type="button" onclick="expression += '9'; document.getElementById('expression').innerHTML = expression"> 9 </button>
+		<button type="button" onclick="expression += '0'; document.getElementById('expression').innerHTML = expression"> 0 </button>
+		
+		
+		<button type="button" onclick="expression = '';   document.getElementById('expression').innerHTML = expression; document.getElementById('result').innerHTML = '' "> clear </button>
+		
+		<button type="button" onclick="expression = expression.slice(0,expression.length-1); document.getElementById('expression').innerHTML = expression">'<<<'</button>
+		
+		
+		<p id="result"></p>
+		
+		
+	<script>
+	var expression  = "";
+	function plus (){
+		expression = expression + "+";
+		document.getElementById("expression").innerHTML = expression
+	}
+	function minus (){
+		expression = expression + "-";
+		document.getElementById("expression").innerHTML = expression		
+	}
+	function multiplication (){
+		expression = expression + "*";
+		document.getElementById("expression").innerHTML = expression		
+	}
+	function division (){
+		expression = expression + "/";
+		document.getElementById("expression").innerHTML = expression		
+	}
+	function openParenthesis (){
+		expression = expression + "(";
+		document.getElementById("expression").innerHTML = expression		
+	}
+	function closeParenthesis (){
+		expression = expression + ")";
+		document.getElementById("expression").innerHTML = expression		
+	}
+	function clear (){
+		expression = '';
+		document.getElementById('expression').innerHTML = expression;
+		document.getElementById('result').innerHTML = ''
+	}
+	
+	</script>
+</body>
 
 
 
