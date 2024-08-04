@@ -17,7 +17,7 @@ function parenthesisSettler(calculation) {
 	let openp = 0;
 	let closep = 0;
 	for (let i = 0; i < calculation.length; i++) {
-		if (operators.has(calculation[i]) && operators.has(calculation[i+1])) {
+		if((operators.has(calculation[i]) && operators.has(calculation[i+1])) || ((calculation[i] == "(") && (calculation[i+1] == ")"))) {
 			stop();
 			return;
 		}
@@ -41,6 +41,9 @@ function parenthesisSettler(calculation) {
 		stop();
 		return;
 	}
+	
+	
+	
 	
 	
 	let exp;

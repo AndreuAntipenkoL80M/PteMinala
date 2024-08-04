@@ -6,13 +6,20 @@
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
-            background-color: #aaeeff;
+            background-color: #faebd7;
             margin: 10px;
 
         }
+	#snake {
+		background-color: #ffffff;
+		height: 700px;
+  		width: 700px;
 
+	}
     </style>
     <script src="calculator.js"></script>
+    <script src="snake.js"></script>
+	<link rel="stylesheet" href="crasivenko.css">
 </head>
 <body>
 <p id="expression"></p>
@@ -78,6 +85,11 @@
 	}
 	
 	</script>
+	
+	<div id="snake">
+	<button id="snakeStartButton" type="button" onclick="snakeStart()">Змееудушье</button>
+	</div>
+	
 </body>
 
 
