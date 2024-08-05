@@ -18,7 +18,7 @@ function snakeStart () {
 
 function createField (size1){
 	deleteSizeOptions();
-	size = size1; // а оно так сработает??
+	size = size1; // global
 	//document.getElementById("result").innerHTML = size;
 	let field = document.createElement('table');
 	document.getElementById("snake").appendChild(field);
@@ -47,11 +47,9 @@ function createField (size1){
 }
 
 function startGame() {
-	filth = document.getElementById("startButton");
-	filth.remove();
-	headx = 10;
-	heady = 10;
-	let head = document.getElementById("cell " + headx+" "+ heady);
+	stBt = document.getElementById("startButton");
+	stBt.remove();
+
 	//const directions = new Set (["left","right","up","down"]);
 	game().then(
 		function (score) {
@@ -60,11 +58,38 @@ function startGame() {
 	);
 
 }
+
+
+
+
+
 async function game(){
 	document.onkeydown = checkKey;
-	let tickInterval = 2000;
+	let tickInterval = 800;
 	let score = 0;
+	let headx = 10;
+	let heady = 10;
+	let foodx, foody;
+	let head = document.getElementById("cell " + headx+" "+ heady);
 	let currentDirection = "Right";
+	let food = false;
+	class tail{
+		constractor(x,y){
+			this.x = x;
+			this.y = y;
+			//this.pos = body.lenght
+		}
+	}
+	const body = [];
+	let previousDirection = "Right";
+
+
+
+
+
+
+
+
 
 	function checkKey(dir) {
 	
@@ -85,54 +110,127 @@ async function game(){
 	
 	}
 	
-	function headMovement(headx, heady, dir){
-		document.getElementById("cell"+" "+headx+" "+heady).innerHTML = "H";
-		switch (dir){
-			case "Left":
-				document.getElementById("cell"+" "+(headx+1)+" "+heady).innerHTML = "T";
-				break;
-			case "Right":
-				document.getElementById("cell"+" "+(headx-1)+" "+heady).innerHTML = "T";
-				break;
-			case "Up":
-				document.getElementById("cell"+" "+headx+" "+(heady+1)).innerHTML = "T";
-				break;
-			case "Down":
-				document.getElementById("cell"+" "+headx+" "+(heady-1)).innerHTML = "T";
-				break;
-			}
-	}
-
 	function lastDir (dir) {
 		currentDirection = dir;
 		console.log (dir);
 	}
 
 
-	function tick(resolve) {
-		score++;
-		console.log(score);
-		switch (currentDirection){
+	function placeFood(){
+		let foodCoordinate = Math.floor(Math.random()*size*size+1);
+		foodx = foodCoordinate%size+1;
+		foody = (foodCoordinate-foodx+1)/size+1;
+		console.log("eda = "+foodCoordinate+" "+foodx+" "+foody)
+		food = true;
+		document.getElementById("cell "+foodx+" "+foody).innerHTML = "C";
+	}
+
+	
+	function headMovementDisplay(headx, heady, dir){
+		document.getElementById("cell "+headx+" "+heady).innerHTML = "H";
+		/*switch (dir){
 			case "Left":
-				headx = headx-1;
+				document.getElementById("cell "+(headx+1)+" "+heady).innerHTML = "T";
 				break;
 			case "Right":
-				headx = headx+1;
+				document.getElementById("cell "+(headx-1)+" "+heady).innerHTML = "T";
 				break;
 			case "Up":
-				heady = heady-1;
+				document.getElementById("cell "+headx+" "+(heady+1)).innerHTML = "T";
 				break;
 			case "Down":
+				document.getElementById("cell "+headx+" "+(heady-1)).innerHTML = "T";
+				break;
+			}*/
+	}
+
+
+	function headMovement(curDir){
+		if (curDir == "Left" && previousDirection!="Right") {
+			headx = headx-1;
+			previousDirection = currentDirection;
+		} else if (curDir == "Right" && previousDirection!="Left") {
+			headx = headx+1;
+			previousDirection = currentDirection;
+		} else if (curDir == "Up" && previousDirection!="Down") {
+			heady = heady-1;
+			previousDirection = currentDirection;
+		} else if (curDir == "Down" && previousDirection!="Up") {
+			heady = heady+1;
+			previousDirection = currentDirection;
+		} else {
+			currentDirection = previousDirection;
+			headMovement(currentDirection)
+		} 
+		//switch (curDir){
+		//	case "Left":
+				
+				/*break;
+			case "Right":
+				if (previousDirection!="Left"){
+				headx = headx+1;
+				}
+				break;
+			case "Up":
+				if (previousDirection!="Down"){
+				heady = heady-1;
+				}
+				break;
+			case "Down":
+				if (previousDirection!="Up"){
 				heady = heady+1;
+				}
+				break;
+			default:
+				headMovement(previousDirection);
 				break;
 			}
-			console.log (headx + " " + heady);
-			headMovement(headx, heady, currentDirection);
+	}*/
+	}
+
+	function eating() {
+		if (headx == foodx && heady == foody){
+			score ++;
+			food = false;
+			body.push(new tail())
+		}
+	}
+	
+	function bodyMoving() {
+		for (let i = body.length-1; i>0; i++){
+			body[i].x = body[i-1].x;
+			body[i].y = body[i-1].y;
+		}
+		body[0].x = headx;
+		body[0].y = heady;
+	}
+
+	function tick(resolve) {
+		if (food == false) {
+			placeFood()
+		};
+		//score++;  //log
+		//console.log(score); //log
+		headMovement(currentDirection);
+		eating();
+		
+
+
+		console.log (headx + " " + heady);
+		headMovementDisplay(headx, heady, currentDirection);
 
 		if (score >= 5) {
 			clearInterval(axsaxsxa);
 			return resolve(score)}
 	}
+
+
+
+
+
+
+
+
 
 	const aboba = new Promise((resolve) => {
 		axsaxsxa = setInterval(function(){tick(resolve)},tickInterval);
