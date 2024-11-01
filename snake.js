@@ -3,7 +3,7 @@ function snakeStart () {
 	for (let i = 0; i<3; i++) {
 		let size = 16+i*2;
 		let sizeButton = document.createElement("button");
-		document.getElementById("snake").appendChild(sizeButton);
+		document.getElementById("actionField").appendChild(sizeButton);
 		sizeButton.innerHTML = size;
 		sizeButton.id = "size"+size;
 		sizeButton.type = "button";
@@ -21,7 +21,7 @@ function createField (size1){
 	size = size1; // global
 	//document.getElementById("result").innerHTML = size;
 	let field = document.createElement('table');
-	document.getElementById("snake").appendChild(field);
+	document.getElementById("actionField").appendChild(field);
 	field.id = "snakeField";
 	for (let i = 1; i<=size; i++) {
 		let row = document.createElement("tr");
@@ -31,14 +31,14 @@ function createField (size1){
 			let cell = document.createElement("td");
 			row.appendChild(cell);
 			cell.id = "cell "+y+" "+i;
-			cell.class = "cells";
-			cell.class = "row" + i;
-			cell.class = "column" + y;
-			cell.innerHTML = cell.id;
+			cell.className = "cells row"+i+" colomn"+y;
+			//cell.className = "row" + i;
+			//cell.class = "column" + y;
+			//cell.innerHTML = cell.id;
 		}
 	}
 	let startButton = document.createElement("button");
-	document.getElementById("snake").insertBefore(startButton,snakeField);
+	document.getElementById("actionField").insertBefore(startButton,snakeField);
 	startButton.innerHTML = "Start";
 	startButton.id = "startButton";
 	startButton.type = "button";
@@ -54,7 +54,10 @@ function startGame() {
 	game().then(
 		function (score) {
 			window.alert(score+" end score");
-		}
+		},
+		(function (){
+			endGame();
+		})()
 	);
 
 }
@@ -77,10 +80,13 @@ async function game(){
 		constractor(x,y){
 			this.x = x;
 			this.y = y;
-			//this.pos = body.lenght
 		}
 	}
 	const body = [];
+	body[0] = new tail();
+	body[0].x = headx;
+	body[0].y = heady;
+	console.log(body[0].x);
 	let previousDirection = "Right";
 
 
@@ -92,7 +98,12 @@ async function game(){
 
 
 	function checkKey(dir) {
-	
+
+		function lastDir (dir) {
+			currentDirection = dir;
+			console.log (dir);
+		}
+
 		dir = window.event;
 	
 		if (dir.keyCode == '38') {
@@ -110,14 +121,10 @@ async function game(){
 	
 	}
 	
-	function lastDir (dir) {
-		currentDirection = dir;
-		console.log (dir);
-	}
 
 
 	function placeFood(){
-		let foodCoordinate = Math.floor(Math.random()*size*size+1);
+		let foodCoordinate = Math.floor(Math.random()*size*size);
 		foodx = foodCoordinate%size+1;
 		foody = (foodCoordinate-foodx+1)/size+1;
 		console.log("eda = "+foodCoordinate+" "+foodx+" "+foody)
@@ -126,22 +133,8 @@ async function game(){
 	}
 
 	
-	function headMovementDisplay(headx, heady, dir){
+	function headMovementDisplay(headx, heady){
 		document.getElementById("cell "+headx+" "+heady).innerHTML = "H";
-		/*switch (dir){
-			case "Left":
-				document.getElementById("cell "+(headx+1)+" "+heady).innerHTML = "T";
-				break;
-			case "Right":
-				document.getElementById("cell "+(headx-1)+" "+heady).innerHTML = "T";
-				break;
-			case "Up":
-				document.getElementById("cell "+headx+" "+(heady+1)).innerHTML = "T";
-				break;
-			case "Down":
-				document.getElementById("cell "+headx+" "+(heady-1)).innerHTML = "T";
-				break;
-			}*/
 	}
 
 
@@ -162,47 +155,42 @@ async function game(){
 			currentDirection = previousDirection;
 			headMovement(currentDirection)
 		} 
-		//switch (curDir){
-		//	case "Left":
-				
-				/*break;
-			case "Right":
-				if (previousDirection!="Left"){
-				headx = headx+1;
-				}
-				break;
-			case "Up":
-				if (previousDirection!="Down"){
-				heady = heady-1;
-				}
-				break;
-			case "Down":
-				if (previousDirection!="Up"){
-				heady = heady+1;
-				}
-				break;
-			default:
-				headMovement(previousDirection);
-				break;
-			}
-	}*/
 	}
 
 	function eating() {
 		if (headx == foodx && heady == foody){
 			score ++;
 			food = false;
-			body.push(new tail())
+			body[body.length] = new tail;
+			console.log(body);
 		}
 	}
 	
 	function bodyMoving() {
-		for (let i = body.length-1; i>0; i++){
+		
+		last = body.at(body.length-1);
+		if (food == true) {
+			document.getElementById("cell "+last.x+" "+last.y).innerHTML = "";
+
+		}
+		for (let i = body.length-1; i>0; i--){
 			body[i].x = body[i-1].x;
 			body[i].y = body[i-1].y;
 		}
 		body[0].x = headx;
 		body[0].y = heady;
+
+		if (food == false) {
+			document.getElementById("cell "+last.x+" "+last.y).innerHTML = "";
+
+		}
+
+	}
+
+	function bodyMovingDisplay(arr){
+		for (let i = 0; i<arr.length; i++){
+			document.getElementById("cell "+arr[i].x+" "+arr[i].y).innerHTML = "T";
+		}
 	}
 
 	function tick(resolve) {
@@ -213,11 +201,13 @@ async function game(){
 		//console.log(score); //log
 		headMovement(currentDirection);
 		eating();
-		
+		bodyMoving();
+		bodyMovingDisplay(body);
+		headMovementDisplay(headx, heady);
 
 
 		console.log (headx + " " + heady);
-		headMovementDisplay(headx, heady, currentDirection);
+
 
 		if (score >= 5) {
 			clearInterval(axsaxsxa);
@@ -295,9 +285,9 @@ function inputHandle(){
 
 
 function endGame() {
-	document.getElementsByClassName(cells);
+	document.getElementsByClassName("cells");
 	let startButton = document.createElement("button");
-	document.getElementById("snake").insertBefore(startButton,snakeField);
+	document.getElementById("actionField").insertBefore(startButton,snakeField);
 	startButton.innerHTML = "Start";
 	startButton.id = "startButton";
 	startButton.type = "button";
