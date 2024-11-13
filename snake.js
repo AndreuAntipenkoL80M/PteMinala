@@ -47,10 +47,16 @@ function createField (size1){
 }
 
 function startGame() {
-	stBt = document.getElementById("startButton");
-	stBt.remove();
+	startButton.remove();
 
-	//const directions = new Set (["left","right","up","down"]);
+	let endButton = document.createElement("button");
+	document.getElementById("actionField").insertBefore(endButton,snakeField);
+	endButton.innerHTML = "End";
+	endButton.id = "endButton";
+	endButton.type = "button";
+	endButton.onclick = endGame;
+
+
 	game().then(
 		function (score) {
 			window.alert(score+" end score");
@@ -61,6 +67,18 @@ function startGame() {
 	);
 
 }
+
+function endGame() {
+	document.getElementsByClassName("cells");
+	let startButton = document.createElement("button");
+	document.getElementById("actionField").insertBefore(startButton,snakeField);
+	startButton.innerHTML = "Start";
+	startButton.id = "startButton";
+	startButton.type = "button";
+	startButton.onclick = startGame;
+
+}
+
 
 
 
@@ -88,6 +106,49 @@ async function game(){
 	body[0].y = heady;
 	console.log(body[0].x);
 	let previousDirection = "Right";
+
+
+
+
+	function tick(resolve) {
+		if (food == false) {
+			placeFood()
+		};
+		//score++;  //log
+		//console.log(score); //log
+		headMovement(currentDirection);
+		eating();
+		bodyMoving();
+		bodyMovingDisplay(body);
+		headMovementDisplay(headx, heady);
+
+
+		console.log (headx + " " + heady);
+
+
+		if (score >= 5) {
+			clearInterval(axsaxsxa);
+			return resolve(score)}
+	}
+
+
+
+
+
+	const aboba = new Promise((resolve) => {
+		axsaxsxa = setInterval(function(){tick(resolve)},tickInterval);
+	})
+	await aboba;
+	window.alert("asf");
+	/*window.addEventListener("keydown.ArrowDown", function(){lastDir("Down")});
+	window.addEventListener("keydown.ArrowUp", function(){lastDir("Up")});
+	window.addEventListener("keydown.ArrowLeft", function(){lastDir("Left")});
+	window.addEventListener("keydown.ArrowRight", function(){lastDir("Right")});
+	*/
+	return score
+
+
+
 
 
 
@@ -193,46 +254,7 @@ async function game(){
 		}
 	}
 
-	function tick(resolve) {
-		if (food == false) {
-			placeFood()
-		};
-		//score++;  //log
-		//console.log(score); //log
-		headMovement(currentDirection);
-		eating();
-		bodyMoving();
-		bodyMovingDisplay(body);
-		headMovementDisplay(headx, heady);
 
-
-		console.log (headx + " " + heady);
-
-
-		if (score >= 5) {
-			clearInterval(axsaxsxa);
-			return resolve(score)}
-	}
-
-
-
-
-
-
-
-
-
-	const aboba = new Promise((resolve) => {
-		axsaxsxa = setInterval(function(){tick(resolve)},tickInterval);
-	})
-	await aboba;
-	window.alert("asf");
-	/*window.addEventListener("keydown.ArrowDown", function(){lastDir("Down")});
-	window.addEventListener("keydown.ArrowUp", function(){lastDir("Up")});
-	window.addEventListener("keydown.ArrowLeft", function(){lastDir("Left")});
-	window.addEventListener("keydown.ArrowRight", function(){lastDir("Right")});
-	*/
-	return score
 }
 
 
@@ -284,16 +306,7 @@ function inputHandle(){
 
 
 
-function endGame() {
-	document.getElementsByClassName("cells");
-	let startButton = document.createElement("button");
-	document.getElementById("actionField").insertBefore(startButton,snakeField);
-	startButton.innerHTML = "Start";
-	startButton.id = "startButton";
-	startButton.type = "button";
-	startButton.onclick = startGame;
 
-}
 
 
 
