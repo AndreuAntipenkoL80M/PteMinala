@@ -1,5 +1,6 @@
 function snakeStart () {
 	document.getElementById("snakeStartButton").remove();
+	document.getElementById("calculatorStartButton").remove()
 	for (let i = 0; i<3; i++) {
 		let size = 16+i*2;
 		let sizeButton = document.createElement("button");
@@ -62,21 +63,16 @@ function startGame() {
 			window.alert(score+" end score");
 		},
 		(function (){
-			endGame();
+			//endGame();
 		})()
 	);
 
 }
 
 function endGame() {
-	document.getElementsByClassName("cells");
-	let startButton = document.createElement("button");
-	document.getElementById("actionField").insertBefore(startButton,snakeField);
-	startButton.innerHTML = "Start";
-	startButton.id = "startButton";
-	startButton.type = "button";
-	startButton.onclick = startGame;
-
+	document.getElementById("snakeField").remove();
+	document.getElementById("endButton").remove();
+	startAction();
 }
 
 

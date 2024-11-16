@@ -45,7 +45,10 @@
 		
 		
 		<p id="result"></p>
-		
+
+
+		<div id="actionField">
+		</div>
 		
 	<script>
 	var expression  = "";
@@ -78,12 +81,34 @@
 		document.getElementById('expression').innerHTML = expression;
 		document.getElementById('result').innerHTML = ''
 	}
-	
+	function clear (){
+		expression = '';
+		document.getElementById('expression').innerHTML = expression;
+		document.getElementById('result').innerHTML = ''
+	}
+
+
+	function startAction(){
+
+
+		let selectSnake = document.createElement("button");
+		document.getElementById("actionField").appendChild(selectSnake);
+		selectSnake.innerHTML = "Змейка";
+		selectSnake.id = "snakeStartButton";
+		selectSnake.type = "button";
+		selectSnake.onclick = snakeStart;
+		let selectCalculator = document.createElement("button");
+		document.getElementById("actionField").appendChild(selectCalculator);
+		selectCalculator.innerHTML = "Калькулятор";
+		selectCalculator.id = "calculatorStartButton";
+		selectCalculator.type = "button";
+		selectCalculator.onclick = calculatorStart;
+		
+	}
+	startAction();
 	</script>
 	
-	<div id="actionField">
-	<button id="snakeStartButton" type="button" onclick="snakeStart()">Змееудушье</button>
-	</div>
+
 	
 </body>
 
