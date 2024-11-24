@@ -15,6 +15,14 @@ function snakeStart () {
 }
 
 
+function deleteSizeOptions(){
+	for (let i = 0; i<3; i++) {
+		deadOp = document.getElementById("size"+(16+i*2));
+		deadOp.remove();
+	}
+}
+
+
 
 
 function createField (size1){
@@ -35,7 +43,7 @@ function createField (size1){
 			cell.className = "cells row"+i+" colomn"+y;
 			//cell.className = "row" + i;
 			//cell.class = "column" + y;
-			//cell.innerHTML = cell.id;
+			cell.innerHTML = "";
 		}
 	}
 	let startButton = document.createElement("button");
@@ -61,6 +69,7 @@ function startGame() {
 	game().then(
 		function (score) {
 			window.alert(score+" end score");
+			endGame();
 		},
 		(function (){
 			//endGame();
@@ -87,7 +96,7 @@ async function game(){
 	let headx = 10;
 	let heady = 10;
 	let foodx, foody;
-	let head = document.getElementById("cell " + headx+" "+ heady);
+	//let head = document.getElementById("cell " + headx+" "+ heady);
 	let currentDirection = "Right";
 	let food = false;
 	class tail{
@@ -96,6 +105,7 @@ async function game(){
 			this.y = y;
 		}
 	}
+	let gameStatus = true
 	const body = [];
 	body[0] = new tail();
 	body[0].x = headx;
@@ -112,36 +122,52 @@ async function game(){
 		};
 		//score++;  //log
 		//console.log(score); //log
-		headMovement(currentDirection);
-		eating();
-		bodyMoving();
-		bodyMovingDisplay(body);
-		headMovementDisplay(headx, heady);
-
+		try {
+			headMovement(currentDirection);
+			eating();
+			bodyMoving();
+			bodyMovingDisplay(body);
+			headMovementDisplay(headx, heady);
+		} 
+		catch (error) {
+			gameStatus = false;
+		}
 
 		console.log (headx + " " + heady);
 
 
-		if (score >= 5) {
+		/*if (score >= 5) {
 			clearInterval(axsaxsxa);
-			return resolve(score)}
+			return resolve(score)}*/
+		resolve();
+	}
+
+
+	while (gameStatus) {
+		const timerStarter = new Promise((resolve,reject) => {
+			setTimeout(function(){tick(resolve)},tickInterval);
+			
+		})
+		await timerStarter;
 	}
 
 
 
-
-
-	const aboba = new Promise((resolve) => {
+	/*const timerStartet = new Promise((resolve) => {
 		axsaxsxa = setInterval(function(){tick(resolve)},tickInterval);
 	})
-	await aboba;
+	await timerStartet;
 	window.alert("asf");
 	/*window.addEventListener("keydown.ArrowDown", function(){lastDir("Down")});
 	window.addEventListener("keydown.ArrowUp", function(){lastDir("Up")});
 	window.addEventListener("keydown.ArrowLeft", function(){lastDir("Left")});
 	window.addEventListener("keydown.ArrowRight", function(){lastDir("Right")});
 	*/
+
+
+
 	return score
+
 
 
 
@@ -184,15 +210,21 @@ async function game(){
 		let foodCoordinate = Math.floor(Math.random()*size*size);
 		foodx = foodCoordinate%size+1;
 		foody = (foodCoordinate-foodx+1)/size+1;
-		console.log("eda = "+foodCoordinate+" "+foodx+" "+foody)
-		food = true;
-		document.getElementById("cell "+foodx+" "+foody).innerHTML = "C";
+		console.log("eda = "+foodCoordinate+" "+foodx+" "+foody);
+		if (document.getElementById("cell "+foodx+" "+foody).innerHTML == "") {
+			food = true;
+			document.getElementById("cell "+foodx+" "+foody).innerHTML = "C";
+		} else{
+			//window.alert("perecritie");
+			placeFood();
+		}
 	}
 
 	
 	function headMovementDisplay(headx, heady){
-		document.getElementById("cell "+headx+" "+heady).innerHTML = "H";
+			document.getElementById("cell "+headx+" "+heady).innerHTML = "H";
 	}
+
 
 
 	function headMovement(curDir){
@@ -220,6 +252,7 @@ async function game(){
 			food = false;
 			body[body.length] = new tail;
 			console.log(body);
+			tickInterval = (tickInterval/100)*95	;
 		}
 	}
 	
@@ -231,11 +264,15 @@ async function game(){
 
 		}
 		for (let i = body.length-1; i>0; i--){
-			body[i].x = body[i-1].x;
-			body[i].y = body[i-1].y;
+			if(body[i-1].x != headx   ||   body[i-1].y != heady) {
+				body[i].x = body[i-1].x;
+				body[i].y = body[i-1].y;
+			} else {
+				gameStatus = flase;
+			}
 		}
-		body[0].x = headx;
-		body[0].y = heady;
+			body[0].x = headx;
+			body[0].y = heady;
 
 		if (food == false) {
 			document.getElementById("cell "+last.x+" "+last.y).innerHTML = "";
@@ -252,6 +289,10 @@ async function game(){
 
 
 }
+
+
+
+
 
 
 
@@ -314,11 +355,4 @@ function inputHandle(){
 
 
 
-function deleteSizeOptions(){
-	for (let i = 0; i<3; i++) {
-		deadOp = document.getElementById("size"+(16+i*2));
-		deadOp.remove();
-	}
 
-
-}
