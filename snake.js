@@ -66,7 +66,8 @@ function createField (size1){
 	const requestPlayers = new XMLHttpRequest();
 	requestPlayers.onload = function (){
 		const leaderBoard = JSON.parse(this.responseText);
-		info.innerHTML += leaderBoard; 
+		for (let i in leaderBoard.players)
+			info.innerHTML += "<br>" + i.name + ": " + i.score;		 
 	}
 	requestPlayers.open("GET", "leaderBoard.json");
 	requestPlayers.send();
