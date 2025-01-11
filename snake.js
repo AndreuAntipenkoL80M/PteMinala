@@ -1,10 +1,14 @@
 function snakeStart () {
+	let tooltip = document.createElement("div");
+	document.getElementById("actionField").appendChild(tooltip);
+	tooltip.id = "tooltip";
+	tooltip.type = "div"
 	document.getElementById("snakeStartButton").remove();
 	document.getElementById("calculatorStartButton").remove()
 	for (let i = 0; i<3; i++) {
 		let size = 16+i*2;
 		let sizeButton = document.createElement("button");
-		document.getElementById("actionField").appendChild(sizeButton);
+		document.getElementById("tooltip").appendChild(sizeButton);
 		sizeButton.innerHTML = size;
 		sizeButton.id = "size"+size;
 		sizeButton.type = "button";
@@ -47,11 +51,25 @@ function createField (size1){
 		}
 	}
 	let startButton = document.createElement("button");
-	document.getElementById("actionField").insertBefore(startButton,snakeField);
+	document.getElementById("tooltip").appendChild(startButton);
 	startButton.innerHTML = "Start";
 	startButton.id = "startButton";
 	startButton.type = "button";
 	startButton.onclick = startGame;
+
+	let info = document.createElement("p");
+	document.getElementById("actionField").appendChild(info);
+	info.id = "info";
+	info.type = "p";
+	info.innerHTML = "&larr; &uarr;	&rarr; &darr; <br> Управление стрелками!";
+
+	const requestPlayers = new XMLHttpRequest();
+	requestPlayers.onload = function (){
+		const leaderBoard = JSON.parse(this.responseText);
+		info.innerHTML += leaderBoard; 
+	}
+	requestPlayers.open("GET", "leaderBoard.json");
+	requestPlayers.send();
 
 }
 
@@ -59,7 +77,7 @@ function startGame() {
 	startButton.remove();
 
 	let endButton = document.createElement("button");
-	document.getElementById("actionField").insertBefore(endButton,snakeField);
+	document.getElementById("tooltip").appendChild(endButton);
 	endButton.innerHTML = "End";
 	endButton.id = "endButton";
 	endButton.type = "button";
@@ -81,6 +99,8 @@ function startGame() {
 function endGame() {
 	document.getElementById("snakeField").remove();
 	document.getElementById("endButton").remove();
+	document.getElementById("info").remove();
+	document.getElementById("tooltip").remove();
 	startAction();
 }
 

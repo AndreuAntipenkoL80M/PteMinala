@@ -1,5 +1,144 @@
 const operators = new Set (["+","-","*","/"]);
 
+function calculatorStart() {
+	document.getElementById("snakeStartButton").remove();
+	document.getElementById("calculatorStartButton").remove()
+
+	let expressionNode = document.createElement("p");
+	document.getElementById("actionField").appendChild(expressionNode);
+	expressionNode.innerHTML = "";
+	expressionNode.id = "expression";
+	//expression = document.getElementById("expression");
+
+
+
+
+
+	let calculationButton = document.createElement("button");
+	document.getElementById("actionField").appendChild(calculationButton);
+	calculationButton.innerHTML = "Calculate";
+	calculationButton.type = "button";
+	calculationButton.onclick = function () {parenthesisSettler(expression)};
+
+	let plusButton = document.createElement("button");
+	document.getElementById("actionField").appendChild(plusButton);
+	plusButton.innerHTML = "+";
+	plusButton.type = "button";
+	plusButton.onclick = plus;
+
+	let minusButton = document.createElement("button");
+	document.getElementById("actionField").appendChild(minusButton);
+	minusButton.innerHTML = "-";
+	minusButton.type = "button";
+	minusButton.onclick = minus;
+
+	let multiplicationButton = document.createElement("button");
+	document.getElementById("actionField").appendChild(multiplicationButton);
+	multiplicationButton.innerHTML = "*";
+	multiplicationButton.type = "button";
+	multiplicationButton.onclick = multiplication;
+
+	let divisionButton = document.createElement("button");
+	document.getElementById("actionField").appendChild(divisionButton);
+	divisionButton.innerHTML = "/";
+	divisionButton.type = "button";
+	divisionButton.onclick = division;
+
+	let openParenthesisButton = document.createElement("button");
+	document.getElementById("actionField").appendChild(openParenthesisButton);
+	openParenthesisButton.innerHTML = "(";
+	openParenthesisButton.type = "button";
+	openParenthesisButton.onclick = openParenthesis;
+
+	let closeParenthesisButton = document.createElement("button");
+	document.getElementById("actionField").appendChild(closeParenthesisButton);
+	closeParenthesisButton.innerHTML = ")";
+	closeParenthesisButton.type = "button";
+	closeParenthesisButton.onclick = closeParenthesis;
+
+	for (let i = 1; i<10; i++) {
+		let num = document.createElement("button");
+		document.getElementById("actionField").appendChild(num);
+		num.innerHTML = i;
+		num.id = "num"+i;
+		num.type = "button";
+		num.onclick = function(){
+			expression += i;
+			document.getElementById('expression').innerHTML = expression
+		};
+	}
+	let num = document.createElement("button");
+		document.getElementById("actionField").appendChild(num);
+		num.innerHTML = 0;
+		num.id = "num"+"0";
+		num.type = "button";
+		num.onclick = function(){
+			expression += 0;
+			document.getElementById('expression').innerHTML = expression
+		};
+
+
+
+
+	let clearButton = document.createElement("button");
+	document.getElementById("actionField").appendChild(clearButton);
+	clearButton.innerHTML = "clear";
+	clearButton.type = "button";
+	clearButton.onclick = function(){
+		expression = '';
+		document.getElementById('expression').innerHTML = expression;
+		document.getElementById('result').innerHTML = ''
+	};
+
+	let stepBackButton = document.createElement("button");
+	document.getElementById("actionField").appendChild(stepBackButton);
+	stepBackButton.innerHTML = "'<<<'";
+	stepBackButton.type = "button";
+	stepBackButton.onclick = function(){
+		expression = expression.slice(0,expression.length-1);
+		document.getElementById('expression').innerHTML = expression;
+	};
+
+
+
+}
+
+
+function plus (){
+	expression = expression + "+";
+	document.getElementById("expression").innerHTML = expression
+}
+function minus (){
+	expression = expression + "-";
+	document.getElementById("expression").innerHTML = expression		
+}
+function multiplication (){
+	expression = expression + "*";
+	document.getElementById("expression").innerHTML = expression		
+}
+function division (){
+	expression = expression + "/";
+	document.getElementById("expression").innerHTML = expression		
+}
+function openParenthesis (){
+	expression = expression + "(";
+	document.getElementById("expression").innerHTML = expression		
+}
+function closeParenthesis (){
+	expression = expression + ")";
+	document.getElementById("expression").innerHTML = expression		
+}
+function clear (){
+	expression = '';
+	document.getElementById('expression').innerHTML = expression;
+	document.getElementById('result').innerHTML = ''
+}
+
+
+
+
+
+
 
 
 function parenthesisSettler(calculation) {

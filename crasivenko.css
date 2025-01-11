@@ -4,11 +4,18 @@
 #actionField {
     background-color: #ffffff;
     height: 1300px;
-      width: 1300px;
+    width: 1300px;
 
 }
 .cells {
     width: 30px;
     height: 30px;
     border: 1px solid;
+}
+#info {
+    float: left;
+    margin: 15px;
+}
+#snakeField {
+    float: left;
 }
